@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart University System</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --ink: #0f1923;
+            --ink-soft: #2e3f52;
+            --teal: #0e7c6e;
+            --teal-light: #12a890;
+            --teal-dim: rgba(14,124,110,0.12);
+            --amber: #d4870a;
+            --amber-dim: rgba(212,135,10,0.12);
+            --surface: #f4f7f6;
+            --surface-alt: #e8efed;
+            --white: #ffffff;
+            --muted: #7a8fa0;
+            --border: #d4dfe0;
+            --success: #0e7c6e;
+            --warning: #d4870a;
+            --danger: #c0392b;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Jost', sans-serif;
+            background: var(--surface);
+            color: var(--ink);
+            min-height: 100vh;
+        }
+
+        .header {
+            background: var(--ink);
+            padding: 0 40px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 64px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header::after {
+            content: '';
+            position: absolute;
+            bottom: 0; left: 0; right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--teal), var(--teal-light), transparent);
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .brand-mark {
+            width: 36px; height: 36px;
+            border-radius: 8px;
+            background: var(--teal);
+            display: flex; align-items: center; justify-content: center;
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 18px; font-weight: 700;
+            color: var(--white);
+        }
+
+        .brand-name {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 18px; font-weight: 600;
+            color: var(--white);
+            letter-spacing: 0.3px;
+        }
+
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 36px 40px;
+        }
+
+        .page-heading {
+            margin-bottom: 28px;
+        }
+
+        .page-heading h1 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 36px; font-weight: 700;
+            color: var(--ink);
+            line-height: 1.1;
+        }
+
+        .page-heading p {
+            color: var(--muted);
+            font-size: 14px;
+            margin-top: 6px;
+            font-weight: 400;
+        }
+
+        .divider {
+            width: 48px; height: 3px;
+            background: var(--teal);
+            border-radius: 2px;
+            margin: 12px 0;
+        }
+
+        .summary-row {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 14px;
+            margin-bottom: 32px;
+        }
+
+        .summary-card {
+            background: var(--white);
+            border-radius: 10px;
+            padding: 18px 20px;
+            border: 1px solid var(--border);
+            position: relative;
+            overflow: hidden;
+            animation: fadeUp 0.4s ease both;
+        }
+
+        .summary-card:nth-child(1) { animation-delay: 0.05s; }
+        .summary-card:nth-child(2) { animation-delay: 0.1s; }
+        .summary-card:nth-child(3) { animation-delay: 0.15s; }
+        .summary-card:nth-child(4) { animation-delay: 0.2s; }
+        .summary-card:nth-child(5) { animation-delay: 0.25s; }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .summary-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 3px;
+            background: var(--teal);
+        }
+
+        .summary-card.amber::before { background: var(--amber); }
+
+        .sc-icon { font-size: 20px; margin-bottom: 10px; }
+        .sc-value {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 28px; font-weight: 700;
+            color: var(--ink);
+            line-height: 1;
+        }
+        .sc-label {
+            font-size: 11px;
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 4px;
+        }
+
+        .table-section {
+            background: var(--white);
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            overflow: hidden;
+            animation: fadeUp 0.5s ease 0.3s both;
+        }
+
+        .table-toolbar {
+            padding: 18px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid var(--surface-alt);
+        }
+
+        .toolbar-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 20px; font-weight: 600;
+            color: var(--ink);
+        }
+
+        .toolbar-right {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .search-wrap {
+            position: relative;
+        }
+
+        .search-wrap input {
+            padding: 8px 14px 8px 34px;
+            border: 1.5px solid var(--border);
+            border-radius: 8px;
+            font-family: 'Jost', sans-serif;
+            font-size: 13px;
+            color: var(--ink);
+            background: var(--surface);
+            outline: none;
+            width: 220px;
+            transition: border-color 0.2s, background 0.2s;
+        }
+
+        .search-wrap input:focus {
+            border-color: var(--teal);
+            background: var(--white);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 10px; top: 50%;
+            transform: translateY(-50%);
+            font-size: 13px;
+            color: var(--muted);
+        }
+
+        .filter-select {
+            padding: 8px 12px;
+            border: 1.5px solid var(--border);
+            border-radius: 8px;
+            font-family: 'Jost', sans-serif;
+            font-size: 13px;
+            color: var(--ink);
+            background: var(--surface);
+            outline: none;
+            cursor: pointer;
+        }
+
+        .table-wrap { overflow-x: auto; }
+
+        table.data {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13.5px;
+        }
+
+        table.data thead th {
+            background: #f0f5f4;
+            padding: 12px 18px;
+            text-align: left;
+            font-size: 10.5px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1.2px;
+            color: var(--muted);
+            border-bottom: 2px solid var(--surface-alt);
+            white-space: nowrap;
+        }
+
+        table.data tbody tr {
+            border-bottom: 1px solid var(--surface-alt);
+            transition: background 0.15s;
+        }
+
+        table.data tbody tr:last-child {
+            border-bottom: none;
+        }
+
+        table.data tbody tr:hover {
+            background: #f6fbfa;
+        }
+
+        table.data tbody td {
+            padding: 14px 18px;
+            vertical-align: middle;
+        }
+
+        td:nth-child(2) {
+            font-weight: 600;
+            color: var(--ink);
+            text-transform: capitalize;
+        }
+
+        td:nth-child(3) {
+            font-family: 'Jost', monospace;
+            font-size: 12px;
+            color: var(--muted);
+            font-weight: 500;
+        }
+
+        td:nth-child(4) {
+            max-width: 180px;
+        }
+
+        td:nth-child(5) {
+            font-family: monospace;
+            font-size: 12px;
+            color: var(--ink-soft);
+        }
+
+        td.avg-cell {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 17px;
+            font-weight: 700;
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        .badge-excellent { background: rgba(14,124,110,0.12); color: var(--teal); }
+        .badge-good      { background: rgba(212,135,10,0.12); color: var(--amber); }
+        .badge-average   { background: rgba(122,143,160,0.15); color: var(--muted); }
+        .badge-poor      { background: rgba(192,57,43,0.1); color: var(--danger); }
+
+        .badge-yes  { background: rgba(14,124,110,0.12); color: var(--teal); }
+        .badge-no   { background: rgba(122,143,160,0.1); color: #aab5be; }
+        .badge-star { background: rgba(212,135,10,0.12); color: var(--amber); }
+
+        .course-tag {
+            display: inline-block;
+            background: var(--teal-dim);
+            color: var(--teal);
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 500;
+            margin: 2px 2px 2px 0;
+            text-transform: capitalize;
+        }
+
+        .eligible-tag {
+            display: inline-block;
+            background: var(--amber-dim);
+            color: var(--amber);
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 500;
+        }
+
+        .grade-bar-wrap {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .grade-bar {
+            flex: 1;
+            height: 5px;
+            background: var(--surface-alt);
+            border-radius: 3px;
+            overflow: hidden;
+            min-width: 60px;
+        }
+
+        .grade-bar-fill {
+            height: 100%;
+            border-radius: 3px;
+            transition: width 0.6s ease;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 28px;
+            color: var(--muted);
+            font-size: 12px;
+            letter-spacing: 0.5px;
+        }
+
+        .empty {
+            padding: 60px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 15px;
+        }
+    </style>
+</head>
+<body>
+
+<header class="header">
+    <div class="brand">
+        <div class="brand-mark">U</div>
+        <div>
+            <div class="brand-name">Smart University System</div>
+        </div>
+    </div>
+</header>
+
+<div class="container">
+
+    <div class="page-heading">
+        <h1>Student Performance Overview</h1>
+        <div class="divider"></div>
+        <p>Real-time academic records sourced from <strong>student.csv</strong></p>
+    </div>
+
+    <div class="summary-row" id="summaryRow">
+        <div class="summary-card"><div class="sc-icon">🎓</div><div class="sc-value" id="sc-total">—</div><div class="sc-label">Total Students</div></div>
+        <div class="summary-card"><div class="sc-icon">📊</div><div class="sc-value" id="sc-avg">—</div><div class="sc-label">Class Average GPA</div></div>
+        <div class="summary-card"><div class="sc-icon">🏅</div><div class="sc-value" id="sc-exc">—</div><div class="sc-label">Excellent Predictions</div></div>
+        <div class="summary-card amber"><div class="sc-icon">⭐</div><div class="sc-value" id="sc-top">—</div><div class="sc-label">Top Students</div></div>
+        <div class="summary-card"><div class="sc-icon">🎖️</div><div class="sc-value" id="sc-dist">—</div><div class="sc-label">Distinctions</div></div>
+    </div>
+
+    <div class="table-section">
+        <div class="table-toolbar">
+            <div class="toolbar-title">Student Records</div>
+            <div class="toolbar-right">
+                <div class="search-wrap">
+                    <span class="search-icon">🔍</span>
+                    <input type="text" id="searchInput" placeholder="Search students…" oninput="filterRows()">
+                </div>
+                <select class="filter-select" id="predFilter" onchange="filterRows()">
+                    <option value="">All Predictions</option>
+                    <option>Excellent</option>
+                    <option>Good</option>
+                    <option>Average</option>
+                    <option>Poor</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="table-wrap" id="tableWrap">
+            {% if tables %}
+                {% for table in tables %}
+                    {{ table | safe }}
+                {% endfor %}
+            {% else %}
+                <div class="empty">No student data found. Please check your CSV file.</div>
+            {% endif %}
+        </div>
+    </div>
+
+</div>
+
+<div class="footer">Smart University System &nbsp;·&nbsp; Anis.Aisyah.Balqis Platform &nbsp;·&nbsp; {{ year }}</div>
+
+<script>
+    
+function enhanceTable() {
+    const table = document.querySelector('table.data');
+    if (!table) return;
+
+    const headers = [...table.querySelectorAll('thead th')].map(th => th.textContent.trim().toLowerCase());
+    const rows = [...table.querySelectorAll('tbody tr')];
+
+    let totalAvg = 0, excCount = 0, topCount = 0, distCount = 0;
+
+    rows.forEach(row => {
+        const cells = [...row.querySelectorAll('td')];
+
+        cells.forEach((td, i) => {
+            const col = headers[i] || '';
+            const val = td.textContent.trim();
+
+            if (col === 'name') {
+                td.style.textTransform = 'capitalize';
+                td.style.fontWeight = '600';
+            }
+
+            if (col === 'courses') {
+                const courses = val.split(';');
+                td.innerHTML = courses.map(c => `<span class="course-tag">${c.trim()}</span>`).join('');
+            }
+
+            if (col === 'grades') {
+                const grades = val.split(';').map(Number);
+                td.innerHTML = `<span style="color:var(--muted);font-size:12px;font-family:monospace">${grades.join(' · ')}</span>`;
+            }
+
+            if (col === 'avggrade') {
+                const avg = parseFloat(val);
+                totalAvg += avg;
+                const pct = (avg / 100) * 100;
+                let color = avg >= 85 ? 'var(--teal)' : avg >= 75 ? 'var(--amber)' : avg >= 60 ? 'var(--ink-soft)' : 'var(--danger)';
+                td.classList.add('avg-cell');
+                td.innerHTML = `
+                    <div class="grade-bar-wrap">
+                        <span style="color:${color};font-family:'Cormorant Garamond',serif;font-size:17px;font-weight:700">${avg.toFixed(2)}</span>
+                        <div class="grade-bar"><div class="grade-bar-fill" style="width:${pct}%;background:${color}"></div></div>
+                    </div>`;
+            }
+
+            if (col === 'prediction') {
+                const cls = val.toLowerCase() === 'excellent' ? 'badge-excellent'
+                          : val.toLowerCase() === 'good' ? 'badge-good'
+                          : val.toLowerCase() === 'average' ? 'badge-average' : 'badge-poor';
+                if (val.toLowerCase() === 'excellent') excCount++;
+                td.innerHTML = `<span class="badge ${cls}">${val}</span>`;
+            }
+
+            if (col === 'distinction') {
+                if (val.toLowerCase() === 'yes') distCount++;
+                const cls = val.toLowerCase() === 'yes' ? 'badge-yes' : 'badge-no';
+                td.innerHTML = `<span class="badge ${cls}">${val.toLowerCase() === 'yes' ? '✓ Yes' : '✗ No'}</span>`;
+            }
+
+            if (col === 'topstudent') {
+                if (val.toLowerCase() === 'yes') topCount++;
+                const cls = val.toLowerCase() === 'yes' ? 'badge-star' : 'badge-no';
+                td.innerHTML = `<span class="badge ${cls}">${val.toLowerCase() === 'yes' ? '⭐ Yes' : '✗ No'}</span>`;
+            }
+
+            if (col === 'eligiblecourses') {
+                if (val && val !== '-') {
+                    td.innerHTML = val.split(';').map(c => `<span class="eligible-tag">📌 ${c.trim()}</span>`).join(' ');
+                } else {
+                    td.innerHTML = `<span style="color:var(--muted);font-size:12px">—</span>`;
+                }
+            }
+
+            if (col === 'graduate') {
+                const cls = val.toLowerCase() === 'yes' ? 'badge-yes' : 'badge-no';
+                td.innerHTML = `<span class="badge ${cls}">${val.toLowerCase() === 'yes' ? '🎓 Yes' : val}</span>`;
+            }
+        });
+    });
+
+    const n = rows.length;
+    document.getElementById('sc-total').textContent = n;
+    document.getElementById('sc-avg').textContent = n ? (totalAvg / n).toFixed(2) : '—';
+    document.getElementById('sc-exc').textContent = excCount;
+    document.getElementById('sc-top').textContent = topCount;
+    document.getElementById('sc-dist').textContent = distCount;
+}
+
+function filterRows() {
+    const q = document.getElementById('searchInput').value.toLowerCase();
+    const pred = document.getElementById('predFilter').value.toLowerCase();
+    const rows = document.querySelectorAll('table.data tbody tr');
+
+    rows.forEach(row => {
+        const text = row.textContent.toLowerCase();
+        const matchQ = !q || text.includes(q);
+        const matchP = !pred || text.includes(pred);
+        row.style.display = matchQ && matchP ? '' : 'none';
+    });
+}
+
+enhanceTable();
+</script>
+</body>
+</html>

@@ -1,0 +1,4 @@
+Name,ID,Courses,Grades,AvgGrade,Prediction,Distinction,TopStudent,EligibleCourses,Graduate
+Anis,am123,"MMC3113;ai","85.00;90.00;87.00",87.33,Excellent,Yes,No,-,No
+Balqis,am456,"programming;database1","70.00;75.00;72.00",72.33,Good,No,No,-,No
+Aisyah,am789,"database2;database1","88.00;85.00;87.00",86.67,Excellent,Yes,Yes,database2,No
