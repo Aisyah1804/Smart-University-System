@@ -1,0 +1,26 @@
+[
+  {
+    "Name": "Anis",
+    "ID": "am123",
+    "Code": ["MMC3113", "ITC3084", "SWC3523", "SWC2624"],
+    "Grades": [80.00, 92.00, 76.00, 85.00],
+    "EligibleCourses": "SWC3524",
+    "Graduate": "Yes"
+  },
+  {
+    "Name": "Balqis",
+    "ID": "am456",
+    "Code": ["MMC3113", "SWC3523"],
+    "Grades": [76.00, 82.00],
+    "EligibleCourses": "-",
+    "Graduate": "No"
+  },
+  {
+    "Name": "Aisyah",
+    "ID": "am789",
+    "Code": ["MMC3113", "ITC3084"],
+    "Grades": [90.00, 89.00],
+    "EligibleCourses": "SWC3524",
+    "Graduate": "No"
+  }
+]

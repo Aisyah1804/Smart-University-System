@@ -82,9 +82,7 @@
             padding: 36px 40px;
         }
 
-        .page-heading {
-            margin-bottom: 28px;
-        }
+        .page-heading { margin-bottom: 28px; }
 
         .page-heading h1 {
             font-family: 'Cormorant Garamond', serif;
@@ -132,7 +130,7 @@
 
         @keyframes fadeUp {
             from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+            to   { opacity: 1; transform: translateY(0); }
         }
 
         .summary-card::before {
@@ -145,7 +143,7 @@
 
         .summary-card.amber::before { background: var(--amber); }
 
-        .sc-icon { font-size: 20px; margin-bottom: 10px; }
+        .sc-icon  { font-size: 20px; margin-bottom: 10px; }
         .sc-value {
             font-family: 'Cormorant Garamond', serif;
             font-size: 28px; font-weight: 700;
@@ -188,9 +186,7 @@
             gap: 10px;
         }
 
-        .search-wrap {
-            position: relative;
-        }
+        .search-wrap { position: relative; }
 
         .search-wrap input {
             padding: 8px 14px 8px 34px;
@@ -256,40 +252,13 @@
             transition: background 0.15s;
         }
 
-        table.data tbody tr:last-child {
-            border-bottom: none;
-        }
+        table.data tbody tr:last-child { border-bottom: none; }
 
-        table.data tbody tr:hover {
-            background: #f6fbfa;
-        }
+        table.data tbody tr:hover { background: #f6fbfa; }
 
         table.data tbody td {
             padding: 14px 18px;
             vertical-align: middle;
-        }
-
-        td:nth-child(2) {
-            font-weight: 600;
-            color: var(--ink);
-            text-transform: capitalize;
-        }
-
-        td:nth-child(3) {
-            font-family: 'Jost', monospace;
-            font-size: 12px;
-            color: var(--muted);
-            font-weight: 500;
-        }
-
-        td:nth-child(4) {
-            max-width: 180px;
-        }
-
-        td:nth-child(5) {
-            font-family: monospace;
-            font-size: 12px;
-            color: var(--ink-soft);
         }
 
         td.avg-cell {
@@ -310,9 +279,9 @@
         }
 
         .badge-excellent { background: rgba(14,124,110,0.12); color: var(--teal); }
-        .badge-good      { background: rgba(212,135,10,0.12); color: var(--amber); }
+        .badge-good      { background: rgba(212,135,10,0.12);  color: var(--amber); }
         .badge-average   { background: rgba(122,143,160,0.15); color: var(--muted); }
-        .badge-poor      { background: rgba(192,57,43,0.1); color: var(--danger); }
+        .badge-poor      { background: rgba(192,57,43,0.1);    color: var(--danger); }
 
         .badge-yes  { background: rgba(14,124,110,0.12); color: var(--teal); }
         .badge-no   { background: rgba(122,143,160,0.1); color: #aab5be; }
@@ -375,6 +344,13 @@
             color: var(--muted);
             font-size: 15px;
         }
+
+        .loading {
+            padding: 60px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 14px;
+        }
     </style>
 </head>
 <body>
@@ -393,15 +369,36 @@
     <div class="page-heading">
         <h1>Student Performance Overview</h1>
         <div class="divider"></div>
-        <p>Real-time academic records sourced from <strong>student.csv</strong></p>
+        <p>Real-time academic records sourced from <strong>students.json</strong></p>
     </div>
 
+    <!-- Summary cards – values filled by JS after data loads -->
     <div class="summary-row" id="summaryRow">
-        <div class="summary-card"><div class="sc-icon">🎓</div><div class="sc-value" id="sc-total">—</div><div class="sc-label">Total Students</div></div>
-        <div class="summary-card"><div class="sc-icon">📊</div><div class="sc-value" id="sc-avg">—</div><div class="sc-label">Class Average GPA</div></div>
-        <div class="summary-card"><div class="sc-icon">🏅</div><div class="sc-value" id="sc-exc">—</div><div class="sc-label">Excellent Predictions</div></div>
-        <div class="summary-card amber"><div class="sc-icon">⭐</div><div class="sc-value" id="sc-top">—</div><div class="sc-label">Top Students</div></div>
-        <div class="summary-card"><div class="sc-icon">🎖️</div><div class="sc-value" id="sc-dist">—</div><div class="sc-label">Distinctions</div></div>
+        <div class="summary-card">
+            <div class="sc-icon">🎓</div>
+            <div class="sc-value" id="sc-total">—</div>
+            <div class="sc-label">Total Students</div>
+        </div>
+        <div class="summary-card">
+            <div class="sc-icon">📊</div>
+            <div class="sc-value" id="sc-avg">—</div>
+            <div class="sc-label">Class Average GPA</div>
+        </div>
+        <div class="summary-card">
+            <div class="sc-icon">🏅</div>
+            <div class="sc-value" id="sc-exc">—</div>
+            <div class="sc-label">Excellent Predictions</div>
+        </div>
+        <div class="summary-card amber">
+            <div class="sc-icon">⭐</div>
+            <div class="sc-value" id="sc-top">—</div>
+            <div class="sc-label">Top Students</div>
+        </div>
+        <div class="summary-card">
+            <div class="sc-icon">🎖️</div>
+            <div class="sc-value" id="sc-dist">—</div>
+            <div class="sc-label">Distinctions</div>
+        </div>
     </div>
 
     <div class="table-section">
@@ -423,123 +420,194 @@
         </div>
 
         <div class="table-wrap" id="tableWrap">
-            {% if tables %}
-                {% for table in tables %}
-                    {{ table | safe }}
-                {% endfor %}
-            {% else %}
-                <div class="empty">No student data found. Please check your CSV file.</div>
-            {% endif %}
+            <div class="loading">Loading student records…</div>
         </div>
     </div>
 
 </div>
 
+<!-- BUG FIX: year is injected by Flask via render_template(year=...) -->
 <div class="footer">Smart University System &nbsp;·&nbsp; Anis.Aisyah.Balqis Platform &nbsp;·&nbsp; {{ year }}</div>
 
 <script>
-    
-function enhanceTable() {
-    const table = document.querySelector('table.data');
-    if (!table) return;
+    // ── Styling / enhancing an already-rendered table ────────────────
+    function enhanceTable() {
+        const table = document.querySelector('table.data');
+        if (!table) return;
 
-    const headers = [...table.querySelectorAll('thead th')].map(th => th.textContent.trim().toLowerCase());
-    const rows = [...table.querySelectorAll('tbody tr')];
+        const headers = [...table.querySelectorAll('thead th')]
+            .map(th => th.textContent.trim().toLowerCase());
+        const rows    = [...table.querySelectorAll('tbody tr')];
 
-    let totalAvg = 0, excCount = 0, topCount = 0, distCount = 0;
+        let totalAvg = 0, excCount = 0, topCount = 0, distCount = 0;
 
-    rows.forEach(row => {
-        const cells = [...row.querySelectorAll('td')];
+        rows.forEach(row => {
+            const cells = [...row.querySelectorAll('td')];
 
-        cells.forEach((td, i) => {
-            const col = headers[i] || '';
-            const val = td.textContent.trim();
+            cells.forEach((td, i) => {
+                const col = headers[i] || '';
+                const val = td.textContent.trim();
 
-            if (col === 'name') {
-                td.style.textTransform = 'capitalize';
-                td.style.fontWeight = '600';
-            }
-
-            if (col === 'courses') {
-                const courses = val.split(';');
-                td.innerHTML = courses.map(c => `<span class="course-tag">${c.trim()}</span>`).join('');
-            }
-
-            if (col === 'grades') {
-                const grades = val.split(';').map(Number);
-                td.innerHTML = `<span style="color:var(--muted);font-size:12px;font-family:monospace">${grades.join(' · ')}</span>`;
-            }
-
-            if (col === 'avggrade') {
-                const avg = parseFloat(val);
-                totalAvg += avg;
-                const pct = (avg / 100) * 100;
-                let color = avg >= 85 ? 'var(--teal)' : avg >= 75 ? 'var(--amber)' : avg >= 60 ? 'var(--ink-soft)' : 'var(--danger)';
-                td.classList.add('avg-cell');
-                td.innerHTML = `
-                    <div class="grade-bar-wrap">
-                        <span style="color:${color};font-family:'Cormorant Garamond',serif;font-size:17px;font-weight:700">${avg.toFixed(2)}</span>
-                        <div class="grade-bar"><div class="grade-bar-fill" style="width:${pct}%;background:${color}"></div></div>
-                    </div>`;
-            }
-
-            if (col === 'prediction') {
-                const cls = val.toLowerCase() === 'excellent' ? 'badge-excellent'
-                          : val.toLowerCase() === 'good' ? 'badge-good'
-                          : val.toLowerCase() === 'average' ? 'badge-average' : 'badge-poor';
-                if (val.toLowerCase() === 'excellent') excCount++;
-                td.innerHTML = `<span class="badge ${cls}">${val}</span>`;
-            }
-
-            if (col === 'distinction') {
-                if (val.toLowerCase() === 'yes') distCount++;
-                const cls = val.toLowerCase() === 'yes' ? 'badge-yes' : 'badge-no';
-                td.innerHTML = `<span class="badge ${cls}">${val.toLowerCase() === 'yes' ? '✓ Yes' : '✗ No'}</span>`;
-            }
-
-            if (col === 'topstudent') {
-                if (val.toLowerCase() === 'yes') topCount++;
-                const cls = val.toLowerCase() === 'yes' ? 'badge-star' : 'badge-no';
-                td.innerHTML = `<span class="badge ${cls}">${val.toLowerCase() === 'yes' ? '⭐ Yes' : '✗ No'}</span>`;
-            }
-
-            if (col === 'eligiblecourses') {
-                if (val && val !== '-') {
-                    td.innerHTML = val.split(';').map(c => `<span class="eligible-tag">📌 ${c.trim()}</span>`).join(' ');
-                } else {
-                    td.innerHTML = `<span style="color:var(--muted);font-size:12px">—</span>`;
+                // Name column
+                if (col === 'name') {
+                    td.style.textTransform = 'capitalize';
+                    td.style.fontWeight    = '600';
                 }
-            }
 
-            if (col === 'graduate') {
-                const cls = val.toLowerCase() === 'yes' ? 'badge-yes' : 'badge-no';
-                td.innerHTML = `<span class="badge ${cls}">${val.toLowerCase() === 'yes' ? '🎓 Yes' : val}</span>`;
-            }
+                // Courses – semicolon-separated string → tags
+                if (col === 'code') {
+                    td.innerHTML = val.split(';')
+                        .map(c => `<span class="course-tag">${c.trim()}</span>`)
+                        .join('');
+                }
+
+                // Grades – semicolon-separated numbers
+                if (col === 'grades') {
+                    td.innerHTML = `<span style="color:var(--muted);font-size:12px;font-family:monospace">${val.split(';').join(' · ')}</span>`;
+                }
+
+                // Average grade with bar
+                if (col === 'avggrade') {
+                    const avg = parseFloat(val);
+                    totalAvg += avg;
+                    const pct   = avg;   // already 0-100
+                    const color = avg >= 85 ? 'var(--teal)'
+                                : avg >= 75 ? 'var(--amber)'
+                                : avg >= 60 ? 'var(--ink-soft)'
+                                :             'var(--danger)';
+                    td.classList.add('avg-cell');
+                    td.innerHTML = `
+                        <div class="grade-bar-wrap">
+                            <span style="color:${color};font-family:'Cormorant Garamond',serif;font-size:17px;font-weight:700">${avg.toFixed(2)}</span>
+                            <div class="grade-bar">
+                                <div class="grade-bar-fill" style="width:${pct}%;background:${color}"></div>
+                            </div>
+                        </div>`;
+                }
+
+                // Prediction badge
+                if (col === 'prediction') {
+                    const lv  = val.toLowerCase();
+                    const cls = lv === 'excellent' ? 'badge-excellent'
+                              : lv === 'good'      ? 'badge-good'
+                              : lv === 'average'   ? 'badge-average'
+                              :                      'badge-poor';
+                    if (lv === 'excellent') excCount++;
+                    td.innerHTML = `<span class="badge ${cls}">${val}</span>`;
+                }
+
+                // Distinction badge
+                if (col === 'distinction') {
+                    const yes = val.toLowerCase() === 'yes';
+                    if (yes) distCount++;
+                    td.innerHTML = `<span class="badge ${yes ? 'badge-yes' : 'badge-no'}">${yes ? '✓ Yes' : '✗ No'}</span>`;
+                }
+
+                // Top student badge
+                if (col === 'topstudent') {
+                    const yes = val.toLowerCase() === 'yes';
+                    if (yes) topCount++;
+                    td.innerHTML = `<span class="badge ${yes ? 'badge-star' : 'badge-no'}">${yes ? '⭐ Yes' : '✗ No'}</span>`;
+                }
+
+                // Eligible courses
+                if (col === 'eligiblecourses') {
+                    if (val && val !== '-') {
+                        td.innerHTML = val.split(';')
+                            .map(c => `<span class="eligible-tag">📌 ${c.trim()}</span>`)
+                            .join(' ');
+                    } else {
+                        td.innerHTML = `<span style="color:var(--muted);font-size:12px">—</span>`;
+                    }
+                }
+
+                // Graduate badge
+                if (col === 'graduate') {
+                    const yes = val.toLowerCase() === 'yes';
+                    td.innerHTML = `<span class="badge ${yes ? 'badge-yes' : 'badge-no'}">${yes ? '🎓 Yes' : '✗ No'}</span>`;
+                }
+            });
         });
-    });
 
-    const n = rows.length;
-    document.getElementById('sc-total').textContent = n;
-    document.getElementById('sc-avg').textContent = n ? (totalAvg / n).toFixed(2) : '—';
-    document.getElementById('sc-exc').textContent = excCount;
-    document.getElementById('sc-top').textContent = topCount;
-    document.getElementById('sc-dist').textContent = distCount;
-}
+        // Update summary cards
+        const n = rows.length;
+        document.getElementById('sc-total').textContent = n;
+        document.getElementById('sc-avg').textContent   = n ? (totalAvg / n).toFixed(2) : '—';
+        document.getElementById('sc-exc').textContent   = excCount;
+        document.getElementById('sc-top').textContent   = topCount;
+        document.getElementById('sc-dist').textContent  = distCount;
+    }
 
-function filterRows() {
-    const q = document.getElementById('searchInput').value.toLowerCase();
-    const pred = document.getElementById('predFilter').value.toLowerCase();
-    const rows = document.querySelectorAll('table.data tbody tr');
+    // ── Search / filter ──────────────────────────────────────────────
+    function filterRows() {
+        const q    = document.getElementById('searchInput').value.toLowerCase();
+        const pred = document.getElementById('predFilter').value.toLowerCase();
 
-    rows.forEach(row => {
-        const text = row.textContent.toLowerCase();
-        const matchQ = !q || text.includes(q);
-        const matchP = !pred || text.includes(pred);
-        row.style.display = matchQ && matchP ? '' : 'none';
-    });
-}
+        document.querySelectorAll('table.data tbody tr').forEach(row => {
+            const text    = row.textContent.toLowerCase();
+            const matchQ  = !q    || text.includes(q);
+            const matchP  = !pred || text.includes(pred);
+            row.style.display = (matchQ && matchP) ? '' : 'none';
+        });
+    }
 
-enhanceTable();
+    // ── BUG FIX: Build table first, THEN call enhanceTable() ─────────
+    // (Previously enhanceTable() was also called once inline before any
+    //  data existed – that stale call is removed here.)
+    async function loadStudents() {
+        try {
+            const res  = await fetch('/api/students');
+            const data = await res.json();
+
+            const wrap = document.getElementById('tableWrap');
+
+            if (!data.length) {
+                wrap.innerHTML = '<div class="empty">No student data found.</div>';
+                return;
+            }
+
+            // Build table markup
+            const table   = document.createElement('table');
+            table.className = 'data';
+
+            // Header
+            const thead = document.createElement('thead');
+            const headRow = document.createElement('tr');
+            Object.keys(data[0]).forEach(key => {
+                const th = document.createElement('th');
+                th.textContent = key;
+                headRow.appendChild(th);
+            });
+            thead.appendChild(headRow);
+            table.appendChild(thead);
+
+            // Body
+            const tbody = document.createElement('tbody');
+            data.forEach(student => {
+                const tr = document.createElement('tr');
+                Object.values(student).forEach(val => {
+                    const td = document.createElement('td');
+                    td.textContent = val;
+                    tr.appendChild(td);
+                });
+                tbody.appendChild(tr);
+            });
+            table.appendChild(tbody);
+
+            // Replace loading placeholder
+            wrap.innerHTML = '';
+            wrap.appendChild(table);
+
+            // ✅ Enhance only AFTER table is in the DOM
+            enhanceTable();
+
+        } catch (err) {
+            document.getElementById('tableWrap').innerHTML =
+                `<div class="empty">⚠ Failed to load students: ${err.message}</div>`;
+        }
+    }
+
+    loadStudents();
 </script>
 </body>
 </html>

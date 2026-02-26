@@ -1,4 +1,0 @@
-Name,ID,Code,Grades,AvgGrade,Prediction,Distinction,TopStudent,EligibleCourses,Graduate
-Anis,am123,"MMC3113;ITC3084;SWC3523; SWC2624","80.00;92.00;76.00;85.00",83.25,Excellent,Yes,No,-,Yes
-Balqis,am456,"MMC3113;SWC3523","76.00;82.00",79.00,Good,No,No,-,No
-Aisyah,am789,"MMC3113;ITC3084","90.00;89.00",89.50,Excellent,Yes,Yes,database2,No
